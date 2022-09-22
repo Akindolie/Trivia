@@ -226,7 +226,7 @@ The API will return three error types when requests fail:
 ## Deployment N/A
 
 ## Authors
-Yours truly, Akindoie, Michael Akinloye 
+Yours truly, Akindolie, Michael Akinloye 
 
 ## Acknowledgements 
 The awesome team at Udacity and ALX-T ....Kudos! 
