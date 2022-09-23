@@ -74,14 +74,14 @@ class TriviaTestCase(unittest.TestCase):
 
     
     def test_delete_question(self):
-        res = self.client().delete("/questions/26")
+        res = self.client().delete("/questions/2")
         data = json.loads(res.data)
 
         question = Question.query.filter(Question.id == 2).one_or_none()
 
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
-        self.assertEqual(data["deleted"], 26)
+        self.assertEqual(data["deleted"], 2)
         self.assertTrue(data["total_questions"])
         self.assertTrue(len(data["question"]))
         self.assertEqual(question, None)
@@ -124,9 +124,9 @@ class TriviaTestCase(unittest.TestCase):
         res = self.client().post("/quizzes", json={})
         data = json.loads(res.data)
 
-        self.assertEqual(res.status_code, 404)
+        self.assertEqual(res.status_code, 422)
         self.assertEqual(data["success"], False)
-        self.assertEqual(data["message"], "resource not found")
+        self.assertEqual(data["message"], "unprocessable")
 
     def test_get_questions_by_category(self):
         res = self.client().get("/categories/4/questions")
