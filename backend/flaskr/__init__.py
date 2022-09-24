@@ -1,6 +1,7 @@
 # from crypt import methods
 import json
 import os
+import sys
 from unicodedata import category
 from flask import Flask, request, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
@@ -124,11 +125,11 @@ def create_app(test_config=None):
     @app.route('/questions/<int:question_id>', methods=['DELETE'])
     def delete_question(question_id):
 
-        try:
-            question = Question.query.get(question_id)
-            if question is None:
-                abort(404)
+        question = Question.query.filter_by(id=question_id).one_or_none()
 
+        if question is None:
+            abort(404)
+        try:
             question.delete()
 
             selection = Question.query.order_by(Question.id).all()
@@ -138,10 +139,12 @@ def create_app(test_config=None):
                 'success': True,
                 'deleted': question_id,
                 'questions': current_questions,
-                'total_questions': len(Question.query.all())
+                'total_questions': len(Question.query.all()),
+                'question_id': question_id
             })
 
         except:
+            # print(sys.exc_info())
             abort(422)
 
     """
@@ -346,13 +349,13 @@ def create_app(test_config=None):
             "message": "resource not found"
         }), 404
 
-    # @app.errorhandler(422)
-    # def unprocessable(error):
-    #     return jsonify({
-    #         "success": False,
-    #         "error": 422,
-    #         "message": "unprocessable"
-    #     }), 422
+    @app.errorhandler(422)
+    def unprocessable(error):
+        return jsonify({
+            "success": False,
+            "error": 422,
+            "message": "unprocessable"
+        }), 422
 
     @app.errorhandler(500)
     def server_error(error):

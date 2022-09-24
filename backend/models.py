@@ -1,11 +1,18 @@
 import os
 from sqlalchemy import Column, String, Integer, create_engine
 from flask_sqlalchemy import SQLAlchemy
+from decouple import config
 import json
 
-database_name = 'trivia'
+
+# Get environment variables
+USER = os.environ.get('API_USER')
+PASSWORD = os.environ.get('API_PASSWORD')
+DB_NAME = os.environ.get('DB_NAME')
+
+database_name = DB_NAME
 database_path = "postgresql://{}:{}@{}/{}".format(
-    "student", "student", "localhost:5432", database_name
+    USER, PASSWORD, "localhost:5432", database_name
 )
 
 db = SQLAlchemy()
